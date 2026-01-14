@@ -1,6 +1,7 @@
 package jpa.practice.toy.domain;
 
 import jakarta.persistence.*;
+import jpa.practice.toy.dto.MemberJoinRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,5 +33,12 @@ public class Member {
         this.password = password;
         this.nickname = nickname;
         this.town = town;
+    }
+
+    public Member(MemberJoinRequest dto) {
+        this.loginId = dto.getLoginId();
+        this.town = dto.getTown();
+        this.nickname = dto.getNickname();
+        this.password = dto.getPassword();
     }
 }

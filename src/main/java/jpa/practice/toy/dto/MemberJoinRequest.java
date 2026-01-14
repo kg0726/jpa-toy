@@ -1,11 +1,15 @@
 package jpa.practice.toy.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jpa.practice.toy.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+/**
+ * 회원가입용 DTO
+ */
 public class MemberJoinRequest {
 
     @NotBlank(message = "아이디는 필수입니다.")
