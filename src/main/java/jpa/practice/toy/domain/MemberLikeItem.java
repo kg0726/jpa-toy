@@ -17,7 +17,7 @@ public class MemberLikeItem {
     @Column(name = "member_like_item_id")
     private Long id;
 
-    // LikeItem 테이블과 연결
+    // Item 테이블과 연결
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;

@@ -5,6 +5,7 @@ import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.domain.MemberLikeItem;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.dto.LikeItemListResponse;
 import jpa.practice.toy.repository.ItemRepository;
 import jpa.practice.toy.repository.LikeItemRepository;
 import jpa.practice.toy.repository.MemberRepository;
@@ -42,16 +43,28 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow();
         // 아이템 객체 조회
         Item item = itemRepository.findById(itemId).orElseThrow();
+        ItemResponse response = new ItemResponse(item);
         // 이미 찜했는지 확인
         Optional<MemberLikeItem> alreadyLike = likeItemRepository.findByMemberAndItem(member, item);
         // 이미 찜한 상태라면 찜 취소
         if (alreadyLike.isPresent()) {
             likeItemRepository.delete(alreadyLike.get());
+            response.setLike(false);
         } else {
             // 찜하지 않은 상태라면 그대로 저정
             MemberLikeItem likeItem = new MemberLikeItem(item, member);
             likeItemRepository.save(likeItem);
+            response.setLike(true);
         }
-        return new ItemResponse(item);
+        return response;
+    }
+
+    @Override
+    public LikeItemListResponse likeItemList(Member loginMember) {
+        // 영속성 컨텍스트에 넘기기 위해 한번 더 DB에서 조회
+        Member member = memberRepository.findById(loginMember.getId())
+                .orElseThrow();
+
+        return new LikeItemListResponse(member.getMemberLikeItems());
     }
 }

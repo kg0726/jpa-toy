@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.dto.LikeItemListResponse;
 import jpa.practice.toy.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,16 @@ public class ItemController {
         // 좋아요 요청
         ItemResponse response = itemService.likeItem(id, loginMember);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    // 좋아요한 상품 모두 조회
+    @GetMapping
+    public ResponseEntity<LikeItemListResponse> likeItemList(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+
+        // 찜한 상품 목록 요청
+        LikeItemListResponse response = itemService.likeItemList(loginMember);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

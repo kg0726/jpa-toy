@@ -8,6 +8,7 @@ import jpa.practice.toy.domain.Item;
 import jpa.practice.toy.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -19,6 +20,8 @@ public class ItemResponse {
     private CategoryEnum category;
     private MemberJoinResponse memberJoinResponse;
 
+    @Setter
+    private boolean like = false;
 
     public ItemResponse(Item item) {
         this.name = item.getName();
