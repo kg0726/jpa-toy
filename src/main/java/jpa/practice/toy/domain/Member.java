@@ -47,13 +47,13 @@ public class Member {
 
     // 양방향 연관관계 매핑
     @OneToMany(mappedBy = "member")
-    List<Item> itemList = new ArrayList<>();
+    private List<Item> itemList = new ArrayList<>();
     // 연관관계 편의 메서드
     public void addItem(Item item) {
         this.itemList.add(item);
         // 무한루프 방지
         if (item.getMember() != this) {
-            // 상품 객체에도 나(member)를 설정해줌
+            // 상품 객체에도 나(member)를 설정해줌.
             item.setMember(this);
         }
     }
