@@ -25,7 +25,6 @@ public class Item {
     private CategoryEnum category;
 
     // 이 상품을 누가 등록한 상품인지?(N:1)
-    @Setter
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

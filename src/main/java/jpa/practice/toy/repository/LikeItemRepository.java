@@ -8,6 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface LikeItemRepository extends JpaRepository<MemberLikeItem, Long> {
-    boolean findByMember(Member member);
     Optional<MemberLikeItem> findByMemberAndItem(Member member, Item item);
 }
