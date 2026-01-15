@@ -14,6 +14,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         if (session == null || session.getAttribute("loginMember") == null) {
             // 로그인이 안된 사용자라면 거절
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"로그인이 필요한 서비스입니다.\"}");
             return false;
         }
         return true;

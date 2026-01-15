@@ -1,0 +1,35 @@
+package jpa.practice.toy.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jpa.practice.toy.domain.Member;
+import jpa.practice.toy.dto.ItemRequest;
+import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.service.ItemService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/items")
+@RequiredArgsConstructor
+public class ItemController {
+
+    private final ItemService itemService;
+
+    @PostMapping
+    public ResponseEntity<ItemResponse> addItem(@Valid @RequestBody ItemRequest dto, HttpServletRequest request) {
+        // 세션에서 로그인한 회원 정보 꺼내기
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+
+        // 서비스에 상품 정보와 누가 등록하는지 정보를 전달
+        ItemResponse response = itemService.addProduct(dto, loginMember);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}
