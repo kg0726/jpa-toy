@@ -53,7 +53,7 @@ public class Member {
         this.itemList.add(item);
         // 무한루프 방지
         if (item.getMember() != this) {
-            // 상품 객체에도 나(member)를 설정해줌.
+            // 상품 객체에도 나(member)를 설정해줌
             item.setMember(this);
         }
     }
