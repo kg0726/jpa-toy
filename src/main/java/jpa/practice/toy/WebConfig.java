@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/members/join",
                         "/api/login",
                         "/api/logout",
-                        "css/**", "/*.ico", "/error" // 정적 리소스나 에러 페이지 허용
+                        "css/**", "/*.ico", "/error" // 정적 리소스나 에러 페이지 허용함
                 );
 
     }
