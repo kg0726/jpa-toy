@@ -27,6 +27,7 @@ public class Item {
     // 이 상품을 누가 등록한 상품인지?(N:1)
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @Setter
     private Member member;
 
     public Item(ItemRequest request, Member loginMember) {

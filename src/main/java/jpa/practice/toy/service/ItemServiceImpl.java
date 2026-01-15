@@ -3,6 +3,7 @@ package jpa.practice.toy.service;
 import jpa.practice.toy.domain.Item;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.domain.MemberLikeItem;
+import jpa.practice.toy.dto.ItemListResponse;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.LikeItemListResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,5 +68,13 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow();
 
         return new LikeItemListResponse(member.getMemberLikeItems());
+    }
+
+    @Override
+    public ItemListResponse allItems() {
+        // 모든 상품 조회
+        List<Item> itemList = itemRepository.findAll();
+        ItemListResponse response = new ItemListResponse(itemList);
+        return response;
     }
 }

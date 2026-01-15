@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jpa.practice.toy.domain.Member;
+import jpa.practice.toy.dto.ItemListResponse;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.LikeItemListResponse;
@@ -42,7 +43,7 @@ public class ItemController {
     }
 
     // 좋아요한 상품 모두 조회
-    @GetMapping
+    @GetMapping("/like")
     public ResponseEntity<LikeItemListResponse> likeItemList(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member) session.getAttribute("loginMember");
@@ -51,4 +52,11 @@ public class ItemController {
         LikeItemListResponse response = itemService.likeItemList(loginMember);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    // 등록된 상품 모두 조회
+    @GetMapping
+    public ResponseEntity<ItemListResponse> itemList() {
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems());
+    }
+
 }
