@@ -3,6 +3,7 @@ package jpa.practice.toy.service;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.dto.LoginRequest;
 import jpa.practice.toy.dto.MemberJoinRequest;
+import jpa.practice.toy.dto.MemberJoinResponse;
 import jpa.practice.toy.dto.MemberResponse;
 import jpa.practice.toy.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse join(MemberJoinRequest request) {
+    public MemberJoinResponse join(MemberJoinRequest request) {
         // 1. 중복 아이디 검증
         memberRepository.findByLoginId(request.getLoginId())
                 .ifPresent(m -> {
@@ -26,6 +27,13 @@ public class MemberService {
         Member member = new Member(request);
         System.out.println(member.getPassword());
         memberRepository.save(member);
-        return new MemberResponse(member);
+        return new MemberJoinResponse(member);
+    }
+
+    public MemberResponse getMember(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow();
+        MemberResponse response = new MemberResponse(member);
+        return response;
     }
 }

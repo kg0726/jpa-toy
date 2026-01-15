@@ -12,11 +12,11 @@ public class ItemResponse {
 
     private String name;
     private int price;
-    private Member member;
+    private MemberJoinResponse memberJoinResponse;
 
     public ItemResponse(Item item) {
         this.name = item.getName();
         this.price = item.getPrice();
-        this.member = item.getMember();
+        this.memberJoinResponse = new MemberJoinResponse(item.getMember());
     }
 }

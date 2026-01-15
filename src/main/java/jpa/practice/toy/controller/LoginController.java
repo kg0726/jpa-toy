@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.dto.LoginRequest;
-import jpa.practice.toy.dto.MemberResponse;
 import jpa.practice.toy.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
