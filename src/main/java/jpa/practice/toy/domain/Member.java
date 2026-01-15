@@ -46,6 +46,7 @@ public class Member {
     }
 
     // 양방향 연관관계 매핑
+    // 회원이 등록한 상품 목록
     @OneToMany(mappedBy = "member")
     private List<Item> itemList = new ArrayList<>();
     // 연관관계 편의 메서드
@@ -57,4 +58,7 @@ public class Member {
             item.setMember(this);
         }
     }
+    // 회원이 찜한 상품 목록
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberLikeItem> memberLikeItems = new ArrayList<>();
 }
