@@ -1,5 +1,6 @@
 package jpa.practice.toy.service;
 
+import jakarta.persistence.EntityManager;
 import jpa.practice.toy.domain.Item;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.domain.MemberLikeItem;
@@ -25,6 +26,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
     private final LikeItemRepository likeItemRepository;
+    private final EntityManager em;
 
     @Override
     public ItemResponse addProduct(ItemRequest request, Member loginMember) {
@@ -71,10 +73,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemListResponse allItems() {
+    public ItemListResponse allItems(Member loginMember) {
         // 모든 상품 조회
         List<Item> itemList = itemRepository.findAll();
-        ItemListResponse response = new ItemListResponse(itemList);
+        List<MemberLikeItem> memberLikeItems = likeItemRepository.findMemberLikeItemByMemberId(loginMember.getId())
+                .orElseThrow();
+        ItemListResponse response = new ItemListResponse(itemList, memberLikeItems);
         return response;
     }
 }

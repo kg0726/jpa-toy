@@ -55,8 +55,11 @@ public class ItemController {
 
     // 등록된 상품 모두 조회
     @GetMapping
-    public ResponseEntity<ItemListResponse> itemList() {
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems());
+    public ResponseEntity<ItemListResponse> itemList(HttpServletRequest request) {
+        // 로그인한 사용자 조회(해당 사용자가 좋아요를 했는지 확인 여부)
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems(loginMember));
     }
 
 }

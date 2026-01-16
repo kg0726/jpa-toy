@@ -2,6 +2,7 @@ package jpa.practice.toy.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class MemberLikeItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_like_item_id")

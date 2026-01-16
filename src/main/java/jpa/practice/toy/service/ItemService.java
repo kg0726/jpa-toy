@@ -16,5 +16,5 @@ public interface ItemService {
     LikeItemListResponse likeItemList(Member loginMember);
 
     // 모든 등록된 상품 반환
-    ItemListResponse allItems();
+    ItemListResponse allItems(Member loginMember);
 }
