@@ -10,9 +10,11 @@ import java.util.List;
 @Getter
 public class ItemListResponse {
 
-    List<Item> itemList;
+    private List<ItemResponse> itemList;
 
     public ItemListResponse(List<Item> itemList) {
-        this.itemList = itemList;
+        this.itemList = itemList.stream()
+                .map(ItemResponse::new)
+                .toList();
     }
 }
