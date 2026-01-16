@@ -5,6 +5,7 @@ import jpa.practice.toy.dto.LoginRequest;
 import jpa.practice.toy.dto.MemberJoinRequest;
 import jpa.practice.toy.dto.MemberJoinResponse;
 import jpa.practice.toy.dto.MemberResponse;
+import jpa.practice.toy.exception.MemberNotFoundException;
 import jpa.practice.toy.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class MemberService {
 
     public MemberResponse getMember(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new MemberNotFoundException());
         MemberResponse response = new MemberResponse(member);
         return response;
     }

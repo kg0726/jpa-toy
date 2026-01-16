@@ -8,6 +8,8 @@ import jpa.practice.toy.dto.ItemListResponse;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.LikeItemListResponse;
+import jpa.practice.toy.exception.ItemNotFoundException;
+import jpa.practice.toy.exception.MemberNotFoundException;
 import jpa.practice.toy.repository.ItemRepository;
 import jpa.practice.toy.repository.LikeItemRepository;
 import jpa.practice.toy.repository.MemberRepository;
@@ -35,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
         // 세션에서 넘어온 Member는 현재 영속 상태가 아님
         // 다시 영속 상태로 만들기 위해 Member의 ID로 DB에서 다시 조회함 todo: 예외 핸들러 설계
         Member member = memberRepository.findById(loginMember.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new MemberNotFoundException());
         Item item = new Item(request, member);
         ItemResponse itemResponse = new ItemResponse(itemRepository.save(item));
         member.addItem(item);
@@ -46,9 +48,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponse likeItem(Long itemId, Member loginMember) {
         // 사용자 객체를 영속 상태로 만들기 위해 한번 더 조회
         Member member = memberRepository.findById(loginMember.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new MemberNotFoundException());
         // 아이템 객체 조회
-        Item item = itemRepository.findById(itemId).orElseThrow();
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException());
         ItemResponse response = new ItemResponse(item);
         // 이미 찜했는지 확인
         Optional<MemberLikeItem> alreadyLike = likeItemRepository.findByMemberAndItem(member, item);
@@ -69,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
     public LikeItemListResponse likeItemList(Member loginMember) {
         // 영속성 컨텍스트에 넘기기 위해 한번 더 DB에서 조회
         Member member = memberRepository.findById(loginMember.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new MemberNotFoundException());
 
         return new LikeItemListResponse(member.getMemberLikeItems());
     }
@@ -80,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> itemList = itemRepository.findAll();
         // 사용자가 찜한 상품 목록에서 Item의 Id만 추출하여 Set으로 만듦
         Set<Long> likedItemId = likeItemRepository.findMemberLikeItemByMemberId(loginMember.getId())
-                .orElseThrow()
+                .orElseThrow(() -> new MemberNotFoundException())
                 .stream()
                 .map(likeItem -> likeItem.getItem().getId())
                 .collect(Collectors.toSet());
