@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -76,9 +78,13 @@ public class ItemServiceImpl implements ItemService {
     public ItemListResponse allItems(Member loginMember) {
         // 모든 상품 조회
         List<Item> itemList = itemRepository.findAll();
-        List<MemberLikeItem> memberLikeItems = likeItemRepository.findMemberLikeItemByMemberId(loginMember.getId())
-                .orElseThrow();
-        ItemListResponse response = new ItemListResponse(itemList, memberLikeItems);
+        // 사용자가 찜한 상품 목록에서 Item의 Id만 추출하여 Set으로 만듦
+        Set<Long> likedItemId = likeItemRepository.findMemberLikeItemByMemberId(loginMember.getId())
+                .orElseThrow()
+                .stream()
+                .map(likeItem -> likeItem.getItem().getId())
+                .collect(Collectors.toSet());
+        ItemListResponse response = new ItemListResponse(itemList, likedItemId);
         return response;
     }
 }
