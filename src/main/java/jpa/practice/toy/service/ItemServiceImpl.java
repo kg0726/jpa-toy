@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import jpa.practice.toy.domain.Item;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.domain.MemberLikeItem;
-import jpa.practice.toy.dto.ItemListResponse;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.LikeItemListResponse;
@@ -13,12 +12,12 @@ import jpa.practice.toy.exception.MemberNotFoundException;
 import jpa.practice.toy.repository.ItemRepository;
 import jpa.practice.toy.repository.LikeItemRepository;
 import jpa.practice.toy.repository.MemberRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,16 +76,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemListResponse allItems(Member loginMember) {
-        // 모든 상품 조회
-        List<Item> itemList = itemRepository.findAll();
+    public Page<ItemResponse> allItems(Pageable pageable, Member loginMember) {
+        // 페이징 처리된 Item 엔티티들을 가져옴
+        Page<Item> itemPage = itemRepository.findAll(pageable);
         // 사용자가 찜한 상품 목록에서 Item의 Id만 추출하여 Set으로 만듦
         Set<Long> likedItemId = likeItemRepository.findMemberLikeItemByMemberId(loginMember.getId())
                 .orElseThrow(() -> new MemberNotFoundException())
                 .stream()
                 .map(likeItem -> likeItem.getItem().getId())
                 .collect(Collectors.toSet());
-        ItemListResponse response = new ItemListResponse(itemList, likedItemId);
-        return response;
+        // Page 객체 안의 엔티티들을 DTO로 변환
+        return itemPage.map(item -> {
+            ItemResponse dto = new ItemResponse(item);
+            if (likedItemId.contains(item.getId())) dto.setLike(true);
+            return dto;
+        });
     }
 }

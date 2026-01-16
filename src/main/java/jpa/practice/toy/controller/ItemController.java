@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jpa.practice.toy.domain.Member;
-import jpa.practice.toy.dto.ItemListResponse;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.LikeItemListResponse;
 import jpa.practice.toy.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,11 +58,14 @@ public class ItemController {
 
     // 등록된 상품 모두 조회
     @GetMapping
-    public ResponseEntity<ItemListResponse> itemList(HttpServletRequest request) {
+    public ResponseEntity<Page<ItemResponse>> itemList(
+            HttpServletRequest request,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)Pageable pageable
+            ) {
         // 로그인한 사용자 조회(해당 사용자가 좋아요를 했는지 확인 여부)
         HttpSession session = request.getSession(false);
         Member loginMember = (Member) session.getAttribute("loginMember");
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems(loginMember));
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems(pageable, loginMember));
     }
 
 }
