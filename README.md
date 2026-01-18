@@ -1,1 +1,1 @@
-# jpa-toy
+# jpa 연습
