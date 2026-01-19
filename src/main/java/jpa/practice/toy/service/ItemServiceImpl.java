@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
         // 만약 해당 상품과 유저 정보가 같지 않다면 권한 없음
         // 영속성 컨텍스트의 동일성을 활용하기 위해 한번 더 조회
         Member member = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberNotFoundException());
-        if (! item.getMember().equals(member)) {
+        if (!item.getMember().getId().equals(member.getId())) {
             throw new AuthorizationException();
         }
         // 업데이트 실행
@@ -136,7 +136,10 @@ public class ItemServiceImpl implements ItemService {
         // 권한 체크
         Member member = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberNotFoundException());
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
-        if (!member.equals(item.getMember())) throw new AuthorizationException();
+        if (!item.getMember().getId().equals(member.getId())) {
+            throw new AuthorizationException();
+        }
+        likeItemRepository.deleteByItem(item);
         itemRepository.delete(item);
     }
 }

@@ -97,5 +97,4 @@ public class ItemController {
         Member loginMember = (Member) session.getAttribute("loginMember");
         itemService.deleteItem(id, loginMember);
     }
-
 }

@@ -12,4 +12,5 @@ public interface LikeItemRepository extends JpaRepository<MemberLikeItem, Long> 
     Optional<MemberLikeItem> findByMemberAndItem(Member member, Item item);
     // 사용자 id를 통해 해당 사용자가 좋아요한 모든 상품 조회
     Optional<List<MemberLikeItem>> findMemberLikeItemByMemberId(Long memberId);
+    void deleteByItem(Item item);
 }
