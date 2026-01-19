@@ -6,7 +6,9 @@ import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.domain.MemberLikeItem;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.dto.ItemUpdateRequest;
 import jpa.practice.toy.dto.LikeItemListResponse;
+import jpa.practice.toy.exception.AuthorizationException;
 import jpa.practice.toy.exception.ItemNotFoundException;
 import jpa.practice.toy.exception.MemberNotFoundException;
 import jpa.practice.toy.repository.ItemRepository;
@@ -106,5 +108,27 @@ public class ItemServiceImpl implements ItemService {
             response.setLike(true);
         }
         return response;
+    }
+
+    // 상품 정보 업데이트
+    @Override
+    public ItemResponse updateItem(Long id, Member loginMember, ItemUpdateRequest request) {
+        // 업데이트를 요청한 상품 조회
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
+        // 만약 해당 상품과 유저 정보가 같지 않다면 권한 없음
+        // 영속성 컨텍스트의 동일성을 활용하기 위해 한번 더 조회
+        Member member = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberNotFoundException());
+        if (! item.getMember().equals(member)) {
+            throw new AuthorizationException();
+        }
+        // 업데이트 실행
+        item.update(request);
+        ItemResponse response = new ItemResponse(item);
+        Optional<MemberLikeItem> alreadyLike = likeItemRepository.findByMemberAndItem(loginMember, item);
+        if (alreadyLike.isPresent()) {
+            response.setLike(true);
+        }
+        return response
+                ;
     }
 }

@@ -3,6 +3,7 @@ package jpa.practice.toy.service;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.dto.ItemUpdateRequest;
 import jpa.practice.toy.dto.LikeItemListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,5 +20,8 @@ public interface ItemService {
     Page<ItemResponse> allItems(Pageable pageable, Member loginMember);
 
     // 상품 상세 조회
-    ItemResponse getItem(Long id, Member loginMemeber);
+    ItemResponse getItem(Long id, Member loginMember);
+
+    // 상품 업데이트
+    ItemResponse updateItem(Long id, Member loginMember, ItemUpdateRequest request);
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jpa.practice.toy.domain.Member;
 import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
+import jpa.practice.toy.dto.ItemUpdateRequest;
 import jpa.practice.toy.dto.LikeItemListResponse;
 import jpa.practice.toy.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,16 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member) session.getAttribute("loginMember");
         return ResponseEntity.status(HttpStatus.OK).body(itemService.getItem(id, loginMember));
+    }
+
+    // 등록된 상품 업데이트
+    @PatchMapping("/{id}")
+    public ResponseEntity<ItemResponse> updateItem(
+            HttpServletRequest request, @PathVariable Long id, @RequestBody ItemUpdateRequest itemUpdateRequest
+            ) {
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.updateItem(id, loginMember, itemUpdateRequest));
     }
 
 }

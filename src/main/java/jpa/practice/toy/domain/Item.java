@@ -2,6 +2,7 @@ package jpa.practice.toy.domain;
 
 import jakarta.persistence.*;
 import jpa.practice.toy.dto.ItemRequest;
+import jpa.practice.toy.dto.ItemUpdateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,5 +36,15 @@ public class Item {
         this.price = request.getPrice();
         this.member = loginMember;
         this.category = request.getCategory();
+    }
+
+    // 상품 정보를 업데이트하는 메서드
+    public void update(ItemUpdateRequest request) {
+        if (request.getName() != null && !request.getName().isBlank()) {
+            this.name = request.getName();
+        }
+        if (request.getPrice() != null) {
+            this.price = request.getPrice();
+        }
     }
 }
