@@ -128,7 +128,15 @@ public class ItemServiceImpl implements ItemService {
         if (alreadyLike.isPresent()) {
             response.setLike(true);
         }
-        return response
-                ;
+        return response;
+    }
+
+    @Override
+    public void deleteItem(Long id, Member loginMember) {
+        // 권한 체크
+        Member member = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberNotFoundException());
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
+        if (!member.equals(item.getMember())) throw new AuthorizationException();
+        itemRepository.delete(item);
     }
 }

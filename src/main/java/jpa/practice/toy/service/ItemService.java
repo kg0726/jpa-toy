@@ -24,4 +24,7 @@ public interface ItemService {
 
     // 상품 업데이트
     ItemResponse updateItem(Long id, Member loginMember, ItemUpdateRequest request);
+
+    // 상품 삭제
+    void deleteItem(Long id, Member loginMember);
 }

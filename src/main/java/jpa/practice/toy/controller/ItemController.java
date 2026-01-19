@@ -8,6 +8,7 @@ import jpa.practice.toy.dto.ItemRequest;
 import jpa.practice.toy.dto.ItemResponse;
 import jpa.practice.toy.dto.ItemUpdateRequest;
 import jpa.practice.toy.dto.LikeItemListResponse;
+import jpa.practice.toy.repository.ItemRepository;
 import jpa.practice.toy.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -86,6 +87,15 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member) session.getAttribute("loginMember");
         return ResponseEntity.status(HttpStatus.OK).body(itemService.updateItem(id, loginMember, itemUpdateRequest));
+    }
+
+    // 등록된 상품 삭제
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteItem(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        itemService.deleteItem(id, loginMember);
     }
 
 }
