@@ -68,4 +68,13 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.allItems(pageable, loginMember));
     }
 
+    // 등록된 상품 상세조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemResponse> item(
+            HttpServletRequest request, @PathVariable Long id) {
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.getItem(id, loginMember));
+    }
+
 }

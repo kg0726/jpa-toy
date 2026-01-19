@@ -92,4 +92,19 @@ public class ItemServiceImpl implements ItemService {
             return dto;
         });
     }
+
+    // 상품 상세 조회
+
+    @Override
+    public ItemResponse getItem(Long id, Member loginMember) {
+        // 요청받은 상품을 조회
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
+        ItemResponse response = new ItemResponse(item);
+        // 이미 좋아요가 되어있는지 조회
+        Optional<MemberLikeItem> alreadyLike = likeItemRepository.findByMemberAndItem(loginMember, item);
+        if (alreadyLike.isPresent()) {
+            response.setLike(true);
+        }
+        return response;
+    }
 }

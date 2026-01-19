@@ -17,4 +17,7 @@ public interface ItemService {
 
     // 모든 등록된 상품 반환
     Page<ItemResponse> allItems(Pageable pageable, Member loginMember);
+
+    // 상품 상세 조회
+    ItemResponse getItem(Long id, Member loginMemeber);
 }
